@@ -72,7 +72,7 @@ public class World {
         Random generateurAleatoire = new Random();
         
         robin = new Archer();
-        guillaumeT = new Archer();
+        //guillaumeT = new Archer();
         peon = new Paysan();
         bugs = new Lapin();
         gandalf = new Mage();
@@ -145,9 +145,9 @@ public class World {
         if(robin.getPos().equals(position)){
             estDisponible = false;
         }
-        if(guillaumeT.getPos().equals(position)){
-            estDisponible = false;
-        }
+//        if(guillaumeT.getPos().equals(position)){
+//            estDisponible = false;
+//        }
         if(peon.getPos().equals(position)){
             estDisponible = false;
         }
@@ -170,7 +170,6 @@ public class World {
     public void afficheWorld(){
     
         robin.affiche();
-        guillaumeT.affiche();
         bugs.affiche();
         peon.affiche();
         gandalf.affiche();
@@ -179,5 +178,20 @@ public class World {
         soin.affiche();
         mana.affiche();
     }
-    
+
+    /**
+     * Fait avancer le monde d'un tour en déplaçant tous les personnages présents.
+     */
+    public void tourDeJeu() {
+            
+        robin.deplace();
+        bugs.deplace();
+        peon.deplace();
+        gandalf.deplace();
+        boromir.deplace();
+        gmork.deplace();
+        
+        System.out.println("Le jeu a avancé d''un tour !"+ "\n");
+
+    }    
 }

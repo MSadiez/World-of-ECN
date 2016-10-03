@@ -51,13 +51,14 @@ public class Soin extends Potion {
         super(pos, dur);
         this.puissance = puissance;
     }
-    
+        
+    /**
+     * Affiche la fiche de caractéristiques de la potion
+     */
         public void affiche(){
-         System.out.println("Caractéristiques de la Potion de Soin" + "\n"
-         + "Position : "+ this.getPosition().toString() + "\n"
-         + "Durabilité : "+ this.getDurabilite() + "\n"
-         + "Rend : "+ this.getPuissance() + " points de vie" + "\n"
-         );  
+         super.affiche();
+         System.out.println("Rend : "+ this.getPuissance() + " points de vie" + "\n");
+
         }
         
 }

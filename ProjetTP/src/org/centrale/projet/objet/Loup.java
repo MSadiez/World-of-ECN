@@ -39,4 +39,13 @@ public class Loup extends Monstre{
         super(pV, pA, pP, dA, ptPar, p);
     }
     
+    /**
+     * Affiche la fiche de caractéristiques du monstre, en présisant son espèce : le Loup.
+     */
+    @Override
+    public void affiche() {
+        super.affiche();
+        System.out.println("Ce monstre est un Loup" + "\n");
+    }
+    
 }

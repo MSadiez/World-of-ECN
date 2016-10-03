@@ -38,4 +38,13 @@ public class Lapin extends Monstre {
     public Lapin( int pV, int pA, int pP, int dA, int ptPar, Point2D p) {
         super(pV, pA, pP, dA, ptPar, p);
     }
+    
+        /**
+     * Affiche la fiche de caractéristiques du monstre, en présisant son espèce : le Lapin.
+     */
+    @Override
+    public void affiche() {
+        super.affiche();
+        System.out.println("Ce monstre est un Lapin" + "\n");
+    }
 }

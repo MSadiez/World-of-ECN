@@ -52,12 +52,12 @@ public class Mana extends Potion {
         this.puissance = puissance;
     }
     
+    /**
+     * Affiche la fice de caractéristique de la Potion.
+     */
     public void affiche(){
-    System.out.println("Caractéristiques de la Potion de Mana" + "\n"
-    + "Position : "+ this.getPosition().toString() + "\n"
-    + "Durabilité : "+ this.getDurabilite() + "\n"
-    + "Rend : " + this.puissance + " points de mana" + "\n"
-    );
+        super.affiche();
+        System.out.println("Rend : " + this.puissance + " points de mana" + "\n");
     }
     
     

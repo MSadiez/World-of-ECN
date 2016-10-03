@@ -14,7 +14,14 @@ public class TestSeance3{
         
         World mondeTest = new World();
         
-        mondeTest.afficheWorld();
+        mondeTest.soin.affiche();
+        mondeTest.mana.affiche();
+        
+        mondeTest.tourDeJeu();
+        
+        mondeTest.soin.affiche();
+        mondeTest.mana.affiche();
+
     };
     
     
