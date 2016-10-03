@@ -7,161 +7,196 @@ package org.centrale.projet.objet;
 
 import java.util.Random;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Mathéo
  */
 public class World {
+    
     /**
-     * Instance d'Archer présente par défaut sur le monde
+     * Liste des creatures présentes dans l'instance de World.
      */
-    public Archer robin;
-    
+    private ArrayList<Creature> creatures;
+       
     /**
-     * Instance de Paysan présente par défaut sur le monde
+     * Liste des objets présents dans l'instance de World.
      */
-    public Paysan peon;
-    
-   /**
-    * Instance de Lapin présente par défaut sur le monde
-    */
-    public Lapin bugs;
-    
+    private ArrayList<Objet> objets;
+       
     /**
-     * Deuxième instance de Archer présente sur le monde
+     * Matrice de booléens représentant par true les cases occupées et false les cases disponibles.
      */
-    public Archer guillaumeT;
+    private boolean cartePositionsOccupees[][];
+       
+//=================================== Getters et Setters ===============================================================
+    public ArrayList<Creature> getCreatures() {
+        return creatures;
+    }
+
+    public void setCreatures(ArrayList<Creature> Creatures) {
+        this.creatures = Creatures;
+    }
+
+    public ArrayList<Objet> getObjets() {
+        return objets;
+    }
+
+    public void setObjets(ArrayList<Objet> Objets) {
+        this.objets = Objets;
+    }
+
+    public boolean[][] getCartePositionsOccupees() {
+        return cartePositionsOccupees;
+    }
+
+    public void setCartePositionsOccupees(boolean[][] cartePositionsOccupees) {
+        this.cartePositionsOccupees = cartePositionsOccupees;
+    }
+//==============================================================================================    
     
-    /**
-    * Instance de Mage présente par défaut sur le monde
-    */
-    public Mage gandalf;
     
-    /**
-    * Instance de Guerrier présente par défaut sur le monde
-    */
-    public Guerrier boromir;
-    
-    /**
-    * Instance de Loup présente par défaut sur le monde
-    */
-    public Loup gmork;
-    
-    /**
-     * Instance de potion de Soin
-     */
-    public Soin soin;
-    
-    /**
-     * Instance de potion de Mana
-     */
-    public Mana mana;
     /**
      * Méthode qui crée le monde et place ses habitants
      */
     public World(){
-        this.creeMondeAlea();
+        this.creatures = new ArrayList<Creature>();
+        this.objets = new ArrayList<Objet>();
+        this.initialiserCartePositions();
     };
+    
+    /**
+     * Méthode permettant de remettre toutes les positions du monde à l'état disponible.
+     */
+    private void initialiserCartePositions(){
+        cartePositionsOccupees = new boolean[Constantes.TAILLE_MONDE][Constantes.TAILLE_MONDE];
+        for (boolean[] ligne : cartePositionsOccupees){
+            for (boolean casePlateau : ligne){
+                casePlateau = false;
+            }
+        }
+    }
     
     /**
      * Méthode qui va initialiser le monde et placer ses habitants au hasard.
      * On décide que l'instance d'Archer apparaît au centre de la carte (0,0), et que les autres instances apparaîssent dans un carré de côté 10 autour du centre
      */
-    public void creeMondeAlea(){
+    public void creeMondeAlea(int nombreProtagoniste){
         
         Random generateurAleatoire = new Random();
         
-        robin = new Archer();
-        //guillaumeT = new Archer();
-        peon = new Paysan();
-        bugs = new Lapin();
-        gandalf = new Mage();
-        boromir = new Guerrier();
-        gmork = new Loup();
-        soin = new Soin();
-        mana = new Mana();
+        this.initialiserCartePositions();
+        
+        int nombreArchersAleatoire = generateurAleatoire.nextInt(nombreProtagoniste/5);
+        int nombreGuerriersAleatoire = generateurAleatoire.nextInt(nombreProtagoniste/5);
+        int nombreLoupsAleatoire = generateurAleatoire.nextInt(nombreProtagoniste/5);
+        int nombreLapinsAleatoire = generateurAleatoire.nextInt(nombreProtagoniste/5);
+        int nombrePaysansAleatoire = nombreProtagoniste - (nombreArchersAleatoire + nombreGuerriersAleatoire + nombreLapinsAleatoire + nombreLoupsAleatoire);
         
         int abscisseAleatoire = 0;
         int ordonneeAleatoire = 0;
         
-        // On décide arbitrairement de placer l'archer au centre de la carte.
-        Point2D positionArcher = new Point2D(0,0);
-        
-        // On place le paysan dans un rayon de 10 cases autour du centre de la carte.
-        while (! CaseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
-            abscisseAleatoire = generateurAleatoire.nextInt(21) - 10;
-            ordonneeAleatoire = generateurAleatoire.nextInt(21) - 10;
+        // On place aléatoirement les archers sur la carte.
+        for (int i=0;i<nombreArchersAleatoire;i++){
+            
+            Archer nouvelArcher = new Archer();
+            
+            abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            
+            while (! this.caseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
+                abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+                ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            }
+            creatures.add(nouvelArcher);            
+            this.occuperCase(nouvelArcher);
         }
-        peon.setPos(new Point2D(abscisseAleatoire,ordonneeAleatoire));
         
-        //On place le lapin dans un rayon de 10 cases autour du centre de la carte
-        while (! CaseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
-            abscisseAleatoire = generateurAleatoire.nextInt(21) - 10;
-            ordonneeAleatoire = generateurAleatoire.nextInt(21) - 10;
+        
+        // On place aléatoirement les guerriers sur la carte.
+        for (int i=0;i<nombreGuerriersAleatoire;i++){
+            
+            Guerrier nouveauGuerrier = new Guerrier();
+            
+            abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            
+            while (! this.caseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
+                abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+                ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            }
+            creatures.add(nouveauGuerrier);            
+            this.occuperCase(nouveauGuerrier);
         }
-        bugs.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
+        
+        
+        // On place aléatoirement les paysans sur la carte.
+        for (int i=0;i<nombrePaysansAleatoire;i++){
+            
+            Paysan nouveauPaysan = new Paysan();
+            
+            abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            
+            while (! this.caseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
+                abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+                ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            }
+            creatures.add(nouveauPaysan);            
+            this.occuperCase(nouveauPaysan);
+        }
+        
+        
+        // On place aléatoirement les lapins sur la carte.
+        for (int i=0;i<nombreLapinsAleatoire;i++){
+            
+            Lapin nouveauLapin = new Lapin();
+            
+            abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            
+            while (! this.caseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
+                abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+                ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            }
+            creatures.add(nouveauLapin);            
+            this.occuperCase(nouveauLapin);
+        }
+        
+        
+        // On place aléatoirement les loups sur la carte.
+        for (int i=0;i<nombreLoupsAleatoire;i++){
+            
+            Loup nouveauLoup = new Loup();
+            
+            abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            
+            while (! this.caseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
+                abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+                ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
+            }
+            creatures.add(nouveauLoup);            
+            this.occuperCase(nouveauLoup);
+        }
+        };
     
-        //On place le Mage dans un rayon de 10 cases autour du centre de la carte
-        while (! CaseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
-            abscisseAleatoire = generateurAleatoire.nextInt(21) - 10;
-            ordonneeAleatoire = generateurAleatoire.nextInt(21) - 10;
-        }
-        gandalf.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
-        
-        //On place le Guerrier dans un rayon de 10 cases autour du centre de la carte
-        while (! CaseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
-            abscisseAleatoire = generateurAleatoire.nextInt(21) - 10;
-            ordonneeAleatoire = generateurAleatoire.nextInt(21) - 10;
-        }
-        boromir.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
-        
-        //On place le Loup dans un rayon de 10 cases autour du centre de la carte
-        while (! CaseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
-            abscisseAleatoire = generateurAleatoire.nextInt(21) - 10;
-            ordonneeAleatoire = generateurAleatoire.nextInt(21) - 10;
-        }
-        gmork.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
-        
-        // On place la potion de soin dans un rayon de 10 cases autour du centre de la carte.
-        while (! CaseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
-            abscisseAleatoire = generateurAleatoire.nextInt(21) - 10;
-            ordonneeAleatoire = generateurAleatoire.nextInt(21) - 10;
-        }
-        soin.setPosition(new Point2D(abscisseAleatoire,ordonneeAleatoire));
-      
-        // On place la potion de mana dans un rayon de 10 cases autour du centre de la carte.
-        while (! CaseDispo(new Point2D(abscisseAleatoire, ordonneeAleatoire))){
-            abscisseAleatoire = generateurAleatoire.nextInt(21) - 10;
-            ordonneeAleatoire = generateurAleatoire.nextInt(21) - 10;
-        }
-        mana.setPosition(new Point2D(abscisseAleatoire,ordonneeAleatoire));
-    };
+    /**
+     * Renvoie true si la position en entrée est disponible et false si une autre creature l'occupe déjà.
+     * @param position La position dont on souhaite connaître la disponibilité.
+     * @return true si la position en entrée est disponible et false si une autre creature l'occupe déjà
+     */
+    private boolean caseDispo(Point2D position){
+        return cartePositionsOccupees[position.getAbscisse()][position.getOrdonnee()];
+    }
     
-    public boolean CaseDispo(Point2D position){
-        boolean estDisponible = true;
-        if(bugs.getPos().equals(position)){
-            estDisponible = false;
-        }
-        if(robin.getPos().equals(position)){
-            estDisponible = false;
-        }
-//        if(guillaumeT.getPos().equals(position)){
-//            estDisponible = false;
-//        }
-        if(peon.getPos().equals(position)){
-            estDisponible = false;
-        }
-        if(gandalf.getPos().equals(position)){
-            estDisponible = false;
-        }
-        if(boromir.getPos().equals(position)){
-            estDisponible = false;
-        }
-        if(gmork.getPos().equals(position)){
-            estDisponible = false;
-        }
-
-        return estDisponible;
+    /**
+     * Marque comme occuppée sur la carte la position actuelle de la créature c.
+     * @param c La créature dont on veut marquer la position.
+     */
+    private void occuperCase(Creature c){
+        cartePositionsOccupees[c.getPos().getAbscisse()][c.getPos().getOrdonnee()] = true;
     }
     
     /**
@@ -169,27 +204,13 @@ public class World {
      */
     public void afficheWorld(){
     
-        robin.affiche();
-        bugs.affiche();
-        peon.affiche();
-        gandalf.affiche();
-        boromir.affiche();
-        gmork.affiche();
-        soin.affiche();
-        mana.affiche();
+        
     }
 
     /**
      * Fait avancer le monde d'un tour en déplaçant tous les personnages présents.
      */
     public void tourDeJeu() {
-            
-        robin.deplace();
-        bugs.deplace();
-        peon.deplace();
-        gandalf.deplace();
-        boromir.deplace();
-        gmork.deplace();
         
         System.out.println("Le jeu a avancé d''un tour !"+ "\n");
 

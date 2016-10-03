@@ -6,17 +6,10 @@
 package org.centrale.projet.objet;
 
 /**
- *
- * @author Vincent
+ * Classe des constantes utiles dans World of ECN. 
+ * @author Mathéo
  */
-public class TestSeance3{
-    public static void main(String[] args) {
-        
-        World mondeTest = new World();
-        
-
-    };
+public class Constantes {
     
-    
-    
+    final static int TAILLE_MONDE = 1000000 ;        
 }

@@ -11,7 +11,7 @@ import java.util.Random;
  * Super-classe de laquelle hérite toute créature de World of ECN.
  * @author Mathéo
  */
-public class Creature {
+public abstract class Creature {
     
         /**
      * Le nombre de points de vie de la créature. Indique sa résistance au combat.
@@ -127,6 +127,11 @@ public class Creature {
         }
         
     }
+    
+    /**
+     * Affiche la fiche de caractéristique de la Créature
+     */
+    public abstract void affiche();
     
     
 }
