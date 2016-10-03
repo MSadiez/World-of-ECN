@@ -61,8 +61,8 @@ public class World {
      * Méthode qui crée le monde et place ses habitants
      */
     public World(){
-        this.creatures = new ArrayList<Creature>();
-        this.objets = new ArrayList<Objet>();
+        this.creatures = new ArrayList<>();
+        this.objets = new ArrayList<>();
         this.initialiserCartePositions();
     };
     
@@ -80,7 +80,7 @@ public class World {
     
     /**
      * Méthode qui va initialiser le monde et placer ses habitants au hasard.
-     * On décide que l'instance d'Archer apparaît au centre de la carte (0,0), et que les autres instances apparaîssent dans un carré de côté 10 autour du centre
+     * @param nombreProtagoniste Le nombre de Protagonistes souhaité;
      */
     public void creeMondeAlea(int nombreProtagoniste){
         
@@ -100,6 +100,8 @@ public class World {
         // On place aléatoirement les archers sur la carte.
         for (int i=0;i<nombreArchersAleatoire;i++){
             
+            //System.out.println("Entrée dans la boucle de placement des archers");
+            
             Archer nouvelArcher = new Archer();
             
             abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
@@ -109,13 +111,18 @@ public class World {
                 abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
                 ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
             }
+            nouvelArcher.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
             creatures.add(nouvelArcher);            
             this.occuperCase(nouvelArcher);
+            //System.out.println("Archer placé");
         }
+        
         
         
         // On place aléatoirement les guerriers sur la carte.
         for (int i=0;i<nombreGuerriersAleatoire;i++){
+
+            //System.out.println("Entrée dans la boucle de placement des guerriers");
             
             Guerrier nouveauGuerrier = new Guerrier();
             
@@ -126,6 +133,7 @@ public class World {
                 abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
                 ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
             }
+            nouveauGuerrier.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
             creatures.add(nouveauGuerrier);            
             this.occuperCase(nouveauGuerrier);
         }
@@ -143,6 +151,7 @@ public class World {
                 abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
                 ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
             }
+            nouveauPaysan.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
             creatures.add(nouveauPaysan);            
             this.occuperCase(nouveauPaysan);
         }
@@ -160,6 +169,7 @@ public class World {
                 abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
                 ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
             }
+            nouveauLapin.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
             creatures.add(nouveauLapin);            
             this.occuperCase(nouveauLapin);
         }
@@ -177,6 +187,7 @@ public class World {
                 abscisseAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
                 ordonneeAleatoire = generateurAleatoire.nextInt(Constantes.TAILLE_MONDE);
             }
+            nouveauLoup.setPos(new Point2D(abscisseAleatoire, ordonneeAleatoire));
             creatures.add(nouveauLoup);            
             this.occuperCase(nouveauLoup);
         }
@@ -188,7 +199,7 @@ public class World {
      * @return true si la position en entrée est disponible et false si une autre creature l'occupe déjà
      */
     private boolean caseDispo(Point2D position){
-        return cartePositionsOccupees[position.getAbscisse()][position.getOrdonnee()];
+        return (! cartePositionsOccupees[position.getAbscisse()][position.getOrdonnee()]);
     }
     
     /**

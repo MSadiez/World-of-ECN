@@ -91,7 +91,8 @@ public class Archer extends Personnage {
     }
     
     /**
-     * 
+     * Attaque la créature en entrée à distance si possible, sinon au corps-à-corps, sinon pas du tout.
+     * @param c La créature à combattre
      */
     public void combattre(Creature c){
         if (this.getPos().distance(c.getPos()) == 1){

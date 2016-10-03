@@ -11,5 +11,5 @@ package org.centrale.projet.objet;
  */
 public class Constantes {
     
-    final static int TAILLE_MONDE = 1000000 ;        
+    final static int TAILLE_MONDE = 1000 ;        
 }

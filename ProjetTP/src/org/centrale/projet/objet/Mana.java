@@ -6,7 +6,7 @@
 package org.centrale.projet.objet;
 
 /**
- *
+ * Potion de Mana conçue pour rendre du Mana aux créatures marchant dessus.
  * @author Vincent
  */
 public class Mana extends Potion {
